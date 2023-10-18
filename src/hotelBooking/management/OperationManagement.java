@@ -13,6 +13,7 @@ public class OperationManagement {
     public static void startProgram() {
 //        Path root = FileSystems.getDefault().getPath(new String()).toAbsolutePath();
 //        System.out.println(root);
+        Database userDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\userList.txt");
         Scanner sc = new Scanner(System.in);
         ArrayList<String> menu = new ArrayList<>();
         menu.add("Review a room: select 1");
@@ -29,8 +30,11 @@ public class OperationManagement {
                 switch (userChoice) {
                     case 1:
                         System.out.println(1);
+                        initialUser(userDatabase);
                         break;
                     case 2:
+                        UserManagement userList = (UserManagement) userDatabase.readObject();
+                        userList.userPreview("admin");
                         System.out.println(2);
                         break;
                     case 3:
@@ -58,10 +62,17 @@ public class OperationManagement {
 
     }
 
-    public static HashMap<String, User> readUserDatabase () {
-        Path root = FileSystems.getDefault().getPath(new String()).toAbsolutePath();
-        System.out.println(root);
-        Database hotelDatabase = new Database()
-        HashMap<String, User> userList = hotelDatabase.readObject();
+//    public static HashMap<String, User> readUserDatabase () {
+//        Path root = FileSystems.getDefault().getPath(new String()).toAbsolutePath();
+//        System.out.println(root);
+//        Database hotelDatabase = new Database()
+//        HashMap<String, User> userList = hotelDatabase.readObject();
+//    }
+
+    public static void initialUser(Database userDatabase) {
+        User user = new User("admin", "admin", "admin", "aaA1ddD2mmM3iiI4nnN5");
+        UserManagement userManagement = new UserManagement();
+        userManagement.registerUser("admin", user);
+        userDatabase.saveObject(userManagement);
     }
 }

@@ -3,35 +3,36 @@ package hotelBooking.management;
 import hotelBooking.domain.User;
 import hotelBooking.utility.Utility;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class UserManagement {
+public class UserManagement implements Serializable{
     private HashMap<String, User> userList;
     public UserManagement() {
         this.userList = new HashMap<>();
     }
 
-    public boolean registerUser(Scanner sc) {
-        System.out.println("Please enter username: ");
-        String username = sc.nextLine();
-        if(userList.containsKey(username)) {
-            System.out.println("Username already exist, please try again");
-            return false;
-        }
-
-        System.out.println("Please enter your first name: ");
-        String firstName = sc.nextLine();
-        System.out.println("Please enter your last name: ");
-        String lastName = sc.nextLine();
-        System.out.println("Please enter your password: ");
-        String password = sc.nextLine();
-        if(!Utility.isValid(password)) {
-            System.out.println("Password must consist of at least one digit, one lower and one capital alphabet, and have from 8 to 20 symbols");
-            return false;
-        }
-
-        User user = new User(username, firstName, lastName, password);
+    public boolean registerUser(String username, User user) {
+//        System.out.println("Please enter username: ");
+//        String username = sc.nextLine();
+//        if(userList.containsKey(username)) {
+//            System.out.println("Username already exist, please try again");
+//            return false;
+//        }
+//
+//        System.out.println("Please enter your first name: ");
+//        String firstName = sc.nextLine();
+//        System.out.println("Please enter your last name: ");
+//        String lastName = sc.nextLine();
+//        System.out.println("Please enter your password: ");
+//        String password = sc.nextLine();
+//        if(!Utility.isValid(password)) {
+//            System.out.println("Password must consist of at least one digit, one lower and one capital alphabet, and have from 8 to 20 symbols");
+//            return false;
+//        }
+//
+//        User user = new User(username, firstName, lastName, password);
         userList.put(username, user);
         return true;
     }
@@ -48,4 +49,11 @@ public class UserManagement {
         }
     }
 
+    public HashMap<String, User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(HashMap<String, User> userList) {
+        this.userList = userList;
+    }
 }
