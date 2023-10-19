@@ -2,19 +2,19 @@ package hotelBooking.domain;
 
 import java.io.Serializable;
 
-public abstract class Room implements Serializable {
+public class Room implements Serializable {
     private int number;
     private String type;
     private double pricePerNight;
     private double cancellationFee;
     private String status;
 
-    public Room(int number, String type, double pricePerNight, double cancellationFee, String status) {
+    public Room(int number, String type, double pricePerNight, double cancellationFee) {
         this.number = number;
         this.type = type;
         this.pricePerNight = pricePerNight;
         this.cancellationFee = cancellationFee;
-        this.status = status;
+        this.status = "available";
     }
 
     public int getNumber() {
