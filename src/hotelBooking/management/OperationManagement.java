@@ -1,6 +1,7 @@
 package hotelBooking.management;
 
 import hotelBooking.database.Database;
+import hotelBooking.domain.Room;
 import hotelBooking.domain.User;
 
 import java.nio.file.FileSystems;
@@ -11,16 +12,21 @@ import java.util.Scanner;
 
 public class OperationManagement {
     public static void startProgram() {
-//        Path root = FileSystems.getDefault().getPath(new String()).toAbsolutePath();
-//        System.out.println(root);
         Database userDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\userList.txt");
+        Database roomDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\roomList.txt");
+//        initialUser(userDatabase);
+//        initialRoom(roomDatabase);
+        UserManagement userManagement = (UserManagement) userDatabase.readObject();
+        RoomManagement roomManagement = (RoomManagement) roomDatabase.readObject();
         Scanner sc = new Scanner(System.in);
         ArrayList<String> menu = new ArrayList<>();
-        menu.add("Review a room: select 1");
-        menu.add("Book a room: select 2");
-        menu.add("Cancel room reservation: select 3");
-        menu.add("Register user: select 4");
-        menu.add("View user profile: select 5");
+        menu.add("Register user: select 1");
+        menu.add("Log in: select 2");
+        menu.add("View user profile: select 3");
+        menu.add("View a room: select 4");
+        menu.add("Book a room: select 5");
+        menu.add("Cancel room reservation: select 6");
+        menu.add("Admin services: select 7");
         menu.add("Exit: select 0");
         int userChoice = 99;
         while(userChoice != 0 ) {
@@ -29,19 +35,18 @@ public class OperationManagement {
                 userChoice = Integer.parseInt(sc.nextLine());
                 switch (userChoice) {
                     case 1:
-                        System.out.println(1);
-                        initialUser(userDatabase);
+                        if(userManagement.registerUser(sc)) {
+                            userDatabase.saveObject(userManagement);
+                        }
                         break;
                     case 2:
-                        UserManagement userList = (UserManagement) userDatabase.readObject();
-                        userList.userPreview("admin");
-                        System.out.println(2);
+                        userManagement.logIn(sc);
                         break;
                     case 3:
-                        System.out.println(3);
+                        userManagement.viewUser(sc);
                         break;
                     case 4:
-                        System.out.println(4);
+                        roomManagement.view(sc);
                         break;
                     case 5:
                         System.out.println(5);
@@ -54,7 +59,7 @@ public class OperationManagement {
                 }
             } catch (Exception e) {
                 System.out.println(e);
-                System.out.println("Please try again selecting the menu options only");
+                System.out.println("Please try again");
                 userChoice = 99;
             }
 
@@ -71,8 +76,17 @@ public class OperationManagement {
 
     public static void initialUser(Database userDatabase) {
         User user = new User("admin", "admin", "admin", "aaA1ddD2mmM3iiI4nnN5");
-        UserManagement userManagement = new UserManagement();
-        userManagement.registerUser("admin", user);
+        HashMap<String, User> userList = new HashMap<>();
+        userList.put("admin", user);
+        UserManagement userManagement = new UserManagement(userList);
         userDatabase.saveObject(userManagement);
+    }
+
+    public static void initialRoom(Database roomDatabase) {
+        Room room = new Room(101, "Single", 32.00, 10.00);
+        HashMap<String, Room> roomList = new HashMap<>();
+        roomList.put(room.getRoomReference(), room);
+        RoomManagement roomManagement = new RoomManagement(roomList);
+        roomDatabase.saveObject(roomManagement);
     }
 }

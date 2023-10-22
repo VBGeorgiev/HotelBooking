@@ -28,10 +28,12 @@ public class Database {
                 return ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println(e);
+                System.out.println("no object");
                 return null;
             }
         } catch (IOException e) {
             System.out.println(e);
+            System.out.println("no file");
             return null;
         }
 

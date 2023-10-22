@@ -10,17 +10,15 @@ public class User implements Serializable{
     private String firstName;
     private String lastName;
     private String password;
+    private boolean logIn;
     private ArrayList<String> previousBookings;
 
     public User(String username, String firstName, String lastName, String password) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        if(Utility.isValid(password)) {
-            this.password = password;
-        } else {
-            System.out.println("Password must consist of at least one digit, one lower and one capital alphabet, and have from 8 to 20 symbols");
-        }
+        this.password = password;
+        this.logIn = true;
         this.previousBookings = new ArrayList<>();
     }
 
@@ -45,12 +43,7 @@ public class User implements Serializable{
     }
 
     public void setPassword(String password) {
-        if(Utility.isValid(password)) {
-            this.password = password;
-        } else {
-            System.out.println("Password must consist of at least one digit, one lower and one capital alphabet, and have from 8 to 20 symbols");
-        }
-
+        this.password = password;
     }
 
     public ArrayList<String> getPreviousBookings() {
@@ -68,5 +61,13 @@ public class User implements Serializable{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isLogIn() {
+        return logIn;
+    }
+
+    public void setLogIn(boolean logIn) {
+        this.logIn = logIn;
     }
 }
