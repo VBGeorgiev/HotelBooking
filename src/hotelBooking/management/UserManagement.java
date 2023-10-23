@@ -1,6 +1,5 @@
 package hotelBooking.management;
 
-import hotelBooking.database.Database;
 import hotelBooking.domain.User;
 import hotelBooking.utility.Utility;
 
@@ -8,7 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class UserManagement implements Serializable{
+public class UserManagement {
     private HashMap<String, User> userList;
     public UserManagement(HashMap<String, User> userList) {
         this.userList = userList;
@@ -44,16 +43,12 @@ public class UserManagement implements Serializable{
         return true;
     }
 
-    public void viewUser(Scanner sc) {
+    public void view(Scanner sc) {
         String[] username = readUsername(sc);
         if(username[1].equals("Username exist")) {
             String password = readPassword(sc, username[0]);
             if (!password.equals("Wrong password")) {
-                System.out.println("username: " + this.userList.get(username[0]).getUsername());
-                System.out.println("first name: " + this.userList.get(username[0]).getFirstName());
-                System.out.println("last name: " + this.userList.get(username[0]).getLastName());
-                System.out.println("User logged: " + this.userList.get(username[0]).isLogIn());
-                System.out.println("previous bookings: " + this.userList.get(username[0]).getPreviousBookings().toString());
+                this.userList.get(username[0]).view();
             } else {
                 System.out.println("Wrong password");
             }
@@ -69,7 +64,6 @@ public class UserManagement implements Serializable{
         if(username[1].equals("Username exist")) {
             String password = readPassword(sc, username[0]);
             if (password.equals("Wrong password")) {
-                this.userList.get(username[0]).setLogIn(true);
                 System.out.println("Wrong password");
             } else {
                 if (this.userList.get(username[0]).isLogIn()) {
@@ -82,6 +76,28 @@ public class UserManagement implements Serializable{
             }
 
             } else {
+            System.out.println("Username does not exist");
+        }
+
+    }
+
+    public void logOut(Scanner sc) {
+        String[] username = readUsername(sc);
+        if(username[1].equals("Username exist")) {
+            String password = readPassword(sc, username[0]);
+            if (password.equals("Wrong password")) {
+                System.out.println("Wrong password");
+            } else {
+                if (!this.userList.get(username[0]).isLogIn()) {
+                    System.out.println("User has been already logged out");
+                } else {
+                    this.userList.get(username[0]).setLogIn(false);
+                    System.out.println("Successful logout");
+                }
+
+            }
+
+        } else {
             System.out.println("Username does not exist");
         }
 
@@ -118,9 +134,5 @@ public class UserManagement implements Serializable{
         }
 
     }
-
-//    private void saveToDatabase(Database userDatabase) {
-//        userDatabase.saveObject(this.u);
-//    }
 
 }

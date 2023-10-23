@@ -70,4 +70,12 @@ public class User implements Serializable{
     public void setLogIn(boolean logIn) {
         this.logIn = logIn;
     }
+
+    public void view() {
+        System.out.println("username: " + this.getUsername());
+        System.out.println("first name: " + this.getFirstName());
+        System.out.println("last name: " + this.getLastName());
+        System.out.println("User logged: " + this.isLogIn());
+        System.out.println("previous bookings: " + this.getPreviousBookings().toString());
+    }
 }
