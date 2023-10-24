@@ -2,6 +2,7 @@ package hotelBooking.management;
 
 import hotelBooking.domain.Room;
 import hotelBooking.domain.User;
+import hotelBooking.utility.Constant;
 import hotelBooking.utility.Utility;
 
 import java.io.Serializable;
@@ -9,7 +10,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -64,12 +68,21 @@ public class RoomManagement {
             return false;
         }
 
-        System.out.println("Please enter desire date (e.g. 23/05/2024):");
-        SimpleDateFormat dayFormat = new SimpleDateFormat("dd/MM/yyyy");
-        ParsePosition parsePosition = new ParsePosition(0);
-        Date day = dayFormat.parse(sc.nextLine(), parsePosition);
+        SimpleDateFormat dayFormat = new SimpleDateFormat(Constant.pattern);
+        Date firstDay = this.parseDate("Please enter start date (e.g. 23/05/2024):", sc, Constant.pattern);
+        Date finalDay = this.parseDate("Please enter final date (e.g. 23/05/2024):", sc, Constant.pattern);
+        long numDays = Duration.between(firstDay.toInstant(),finalDay.toInstant()).toDays();
+        if(numDays > 0) {
+            for(long i = 0; i < numDays; i++) {
+                Date tempDay = Date.from(firstDay.toInstant().plus(i, ChronoUnit.DAYS));
+                if(this.roomList.get(roomReference).isBooked(tempDay)) {
+                    return false;
+                } else {
+                    System.out.println(dayFormat.format(tempDay));
+                }
+            }
+        }
 
-        System.out.println(dayFormat.format(day));
         return true;
 
     }
@@ -91,6 +104,13 @@ public class RoomManagement {
         } else {
             return false;
         }
+    }
+
+    private Date parseDate(String userMessage, Scanner sc, String pattern) {
+        System.out.println(userMessage);
+        SimpleDateFormat dayFormat = new SimpleDateFormat(pattern);
+        ParsePosition parsePosition = new ParsePosition(0);
+        return dayFormat.parse(sc.nextLine(), parsePosition);
     }
 
 }
