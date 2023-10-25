@@ -1,12 +1,7 @@
 package hotelBooking.management;
 
 import hotelBooking.domain.Room;
-import hotelBooking.utility.Constant;
-
-import java.text.ParsePosition;
-import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -53,46 +48,6 @@ public class RoomManagement {
         return true;
     }
 
-    public boolean bookRoom(Scanner sc) {
-//        System.out.println("Please enter room reference (e.g. Single 101):");
-//        String roomReference = sc.nextLine();
-//        if (!roomExist(roomReference)) {
-//            System.out.println("Wrong room reference");
-//            return false;
-//        }
-
-        Date firstDay = this.parseDate("Please enter start date (e.g. 23/05/2024):", sc);
-        Date finalDay = this.parseDate("Please enter final date (e.g. 23/05/2024):", sc);
-        long numDays = Duration.between(firstDay.toInstant(), finalDay.toInstant()).toDays();
-        ArrayList<String> availableRooms = this.searchAvailableRooms(numDays, firstDay);
-        System.out.println("Available rooms: ");
-        availableRooms.forEach(roomRef -> System.out.println(roomRef));
-        if(!availableRooms.isEmpty()) {
-            System.out.println("Please select a room reference: ");
-            String roomRef = sc.nextLine();
-            if(availableRooms.contains(roomRef)) {
-                this.setRoomBooked(roomRef, numDays, firstDay);
-                System.out.println("Room booking successful");
-                return true;
-            } else {
-                System.out.println("Selected room reference is incorrect");
-                return false;
-            }
-
-        } else {
-            System.out.println("Sorry, no rooms available for this period");
-            return false;
-        }
-
-//        if (this.isRoomAvailable(roomReference, numDays, firstDay)) {
-//            this.setRoomBooked(roomReference, numDays, firstDay);
-//        }
-//
-//        System.out.println("Room booking successful");
-//        return true;
-
-    }
-
     public void view(Scanner sc) {
         System.out.println("Enter room reference (e.g. Single 101): ");
         String roomReference = sc.nextLine();
@@ -104,18 +59,16 @@ public class RoomManagement {
 
     }
 
+    public void viewAll() {
+        this.roomList.keySet().forEach(roomRef -> System.out.println(roomRef));
+    }
+
     private boolean roomExist(String roomReference) {
         if (this.roomList.containsKey(roomReference)) {
             return true;
         } else {
             return false;
         }
-    }
-
-    private Date parseDate(String userMessage, Scanner sc) {
-        System.out.println(userMessage);
-        ParsePosition parsePosition = new ParsePosition(0);
-        return Constant.dayFormat.parse(sc.nextLine(), parsePosition);
     }
 
     public boolean isRoomAvailable(String roomReference, long numDays, Date firstDay) {
@@ -131,26 +84,6 @@ public class RoomManagement {
         }
 
         return true;
-    }
-
-    public void setRoomBooked(String roomReference, long numDays, Date firstDay) {
-        for (long i = 0; i < numDays; i++) {
-            Date tempDay = Date.from(firstDay.toInstant().plus(i, ChronoUnit.DAYS));
-            this.roomList.get(roomReference).addBooking(tempDay);
-        }
-
-    }
-
-    public ArrayList<String> searchAvailableRooms(long numDays, Date firstDay) {
-        ArrayList<String> availableRooms = new ArrayList<>();
-
-        for (String roomRef:this.roomList.keySet()) {
-            if(this.isRoomAvailable(roomRef, numDays, firstDay)){
-                availableRooms.add(roomRef);
-            }
-        }
-
-        return availableRooms;
     }
 
 }

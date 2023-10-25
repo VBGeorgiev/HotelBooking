@@ -76,6 +76,9 @@ public class User implements Serializable{
         System.out.println("first name: " + this.getFirstName());
         System.out.println("last name: " + this.getLastName());
         System.out.println("User logged: " + this.isLogIn());
-        System.out.println("previous bookings: " + this.getPreviousBookings().toString());
+        this.getPreviousBookings()
+                .stream()
+                .forEach(booking -> System.out.println(booking));
+
     }
 }

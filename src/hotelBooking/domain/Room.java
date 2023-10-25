@@ -82,7 +82,10 @@ public class Room implements Serializable {
         System.out.println("Price per night: " + this.pricePerNight);
         System.out.println("Cancellation fee: " + this.cancellationFee);
         System.out.println("Room booked on: ");
-        this.roomBooked.forEach(e -> System.out.println(Constant.dayFormat.format(e)));
+        this.roomBooked
+                .stream()
+                .sorted()
+                .forEach(date -> System.out.println(Constant.dayFormat.format(date)));
     }
 
 }

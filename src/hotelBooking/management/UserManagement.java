@@ -59,12 +59,13 @@ public class UserManagement {
 
     }
 
-    public void logIn(Scanner sc) {
+    public String logIn(Scanner sc) {
         String[] username = readUsername(sc);
         if(username[1].equals("Username exist")) {
             String password = readPassword(sc, username[0]);
             if (password.equals("Wrong password")) {
                 System.out.println("Wrong password");
+                return "";
             } else {
                 if (this.userList.get(username[0]).isLogIn()) {
                     System.out.println("User has been already logged in");
@@ -73,10 +74,13 @@ public class UserManagement {
                     System.out.println("Successful login");
                 }
 
+                return username[0];
+
             }
 
             } else {
             System.out.println("Username does not exist");
+            return "";
         }
 
     }

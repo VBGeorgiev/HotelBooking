@@ -3,8 +3,11 @@ package hotelBooking.management;
 import hotelBooking.database.Database;
 import hotelBooking.domain.Room;
 import hotelBooking.domain.User;
+import hotelBooking.utility.Constant;
 
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -12,7 +15,9 @@ public class OperationManagement {
     public static void startProgram() {
         Database userDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\userList.txt");
         Database roomDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\roomList.txt");
-//        initialUser(userDatabase);
+        Database bookingDatabase = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\bookingList.txt");
+//        initialBooking(bookingDatabase);
+        //        initialUser(userDatabase);
 //        initialRoom(roomDatabase);
         HashMap<String, User> userList = (HashMap<String, User>) userDatabase.readObject();
         UserManagement userManagement = new UserManagement();
@@ -20,6 +25,9 @@ public class OperationManagement {
         HashMap<String, Room> roomList = (HashMap<String, Room>) roomDatabase.readObject();
         RoomManagement roomManagement = new RoomManagement();
         roomManagement.setRoomList(roomList);
+        BookingManagement bookingManagement = new BookingManagement(userManagement, roomManagement);
+        bookingManagement.setBookingList((HashMap<String, ArrayList<Date>>) bookingDatabase.readObject());
+        AdminManagement adminManagement = new AdminManagement(userDatabase, userManagement, roomDatabase, roomManagement, bookingDatabase, bookingManagement);
         Scanner sc = new Scanner(System.in);
         ArrayList<String> menu = new ArrayList<>();
         menu.add("Register user: select 1");
@@ -28,7 +36,7 @@ public class OperationManagement {
         menu.add("View user profile: select 4");
         menu.add("View a room: select 5");
         menu.add("Book a room: select 6");
-        menu.add("Cancel room reservation: select 7");
+        menu.add("View all rooms: select 7");
         menu.add("Admin services: select 8");
         menu.add("Exit: select 0");
         int userChoice = 99;
@@ -57,17 +65,17 @@ public class OperationManagement {
                         roomManagement.view(sc);
                         break;
                     case 6:
-                        if(roomManagement.bookRoom(sc)) {
+                        if(bookingManagement.bookRoom(sc)) {
+                            userDatabase.saveObject(userManagement.getUserList());
                             roomDatabase.saveObject(roomManagement.getRoomList());
+                            bookingDatabase.saveObject(bookingManagement.getBookingList());
                         };
                         break;
                     case 7:
-                        System.out.println(7);
+                        roomManagement.viewAll();
                         break;
                     case 8:
-                        if(roomManagement.addRoom(sc)) {
-                            roomDatabase.saveObject(roomManagement.getRoomList());
-                        }
+                        adminManagement.Operation(sc);
                         break;
                     case 0:
                         break;
@@ -99,4 +107,13 @@ public class OperationManagement {
         roomDatabase.saveObject(roomList);
     }
 
+    public static void initialBooking(Database bookingDatabase) {
+        ParsePosition pos = new ParsePosition(0);
+        Date date = Constant.dayFormat.parse("01/01/2022", pos);
+        ArrayList<Date> dateList = new ArrayList<>();
+        dateList.add(date);
+        HashMap<String, ArrayList<Date>> bookingList = new HashMap<>();
+        bookingList.put("admin_initial", dateList);
+        bookingDatabase.saveObject(bookingList);
+    }
 }
