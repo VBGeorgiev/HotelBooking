@@ -57,13 +57,17 @@ public class OperationManagement {
                         roomManagement.view(sc);
                         break;
                     case 6:
-                        roomManagement.bookRoom(sc);
+                        if(roomManagement.bookRoom(sc)) {
+                            roomDatabase.saveObject(roomManagement.getRoomList());
+                        };
                         break;
                     case 7:
                         System.out.println(7);
                         break;
                     case 8:
-                        System.out.println(8);
+                        if(roomManagement.addRoom(sc)) {
+                            roomDatabase.saveObject(roomManagement.getRoomList());
+                        }
                         break;
                     case 0:
                         break;

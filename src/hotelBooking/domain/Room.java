@@ -1,5 +1,7 @@
 package hotelBooking.domain;
 
+import hotelBooking.utility.Constant;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,7 +81,8 @@ public class Room implements Serializable {
         System.out.println("Room type: " + this.type);
         System.out.println("Price per night: " + this.pricePerNight);
         System.out.println("Cancellation fee: " + this.cancellationFee);
-        System.out.println("Room booked on: " + this.roomBooked.toString());
+        System.out.println("Room booked on: ");
+        this.roomBooked.forEach(e -> System.out.println(Constant.dayFormat.format(e)));
     }
 
 }
