@@ -56,7 +56,13 @@ public class AdminManagement {
                         }
                         break;
                     case 3:
-                        System.out.println("Admin service 3 under construction");
+                        Database userDatabaseBackup = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\userListBackup.txt");
+                        Database roomDatabaseBackup = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\roomListBackup.txt");
+                        Database bookingDatabaseBackup = new Database("C:\\Users\\Georgiev\\IdeaProjects\\HotelBooking\\src\\resource\\bookingListBackup.txt");
+                        userDatabaseBackup.saveObject(this.userManagement.getUserList());
+                        roomDatabaseBackup.saveObject(this.roomManagement.getRoomList());
+                        bookingDatabaseBackup.saveObject(this.bookingManagement.getBookingList());
+                        System.out.println("Database has been backed up");
                         break;
                     case 4:
                         this.userManagement
